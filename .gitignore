@@ -1,0 +1,39 @@
+# Caché y archivos compilados de Python
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Entornos virtuales (¡No subas tus librerías instaladas!)
+.venv/
+venv/
+env/
+ENV/
+build/
+dist/
+
+# Variables de entorno y secretos (¡CRÍTICO para seguridad!)
+.env
+*.env
+.env.[a-zA-Z]*
+!.env.example
+secrets.json
+
+# Bases de datos locales (si usas SQLite de prueba)
+*.sqlite
+*.sqlite3
+*.db
+
+# Archivos del sistema y editores de código
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# Logs de la aplicación
+*.log
+logs/
