@@ -1,19 +1,36 @@
-## nombre de proyecto
-
-Aplicacion de asistencia para los afectados del terremoto de Venezuela el 24 de junio de 2026. Donde se muestren donde estan los pacientes afectados, que insumos necesitan, donantes de sangre, organos, etc.
+## nombre de proyecto: Medinsumos Venezuela
+Aplicación de asistencia para los afectados del terremoto de Venezuela el 24 de junio de 2026. Donde se muestren donde estan los pacientes afectados, que insumos necesitan, donantes de sangre, organos, etc.
 
 ## Stack
-
-- FastApi para el backend
-- PostgresSQL para la base de datos
-- html, css y javascript vanila para el frontend web
+- FastAPI para el backend
+- PostgreSQL para la base de datos
+- HTML, CSS y JavaScript vanilla para el frontend web
 
 ## Estructura de carpetas
-
-por definir
+### carpeta base:
+ - app/
+   - database/   (base.py, database.py, seed.py)
+   - models/     (modelos ORM con SQLModel)
+   - routers/    (endpoints de la API)
+   - schemas/    (Pydantic request/response models)
+ - docs/         (documentación del proyecto)
+ - frontend/     (HTML, CSS, JS)
+   - css/
+   - js/
+   - index.html
+ - spec/         (constitución y especificaciones)
+ - main.py       (entrypoint de FastAPI)
+ - Alembic/      (migraciones de base de datos)
+ - pyproject.toml
+ - AGENTS.md
 
 ## Convenciones
+  - Sigue los principios de la constitución en spec/constitucion/
+  - Siempre verifica las skills instaladas en .opencode/.agents/skills
+  - Ejecuta Ruff antes de commits: `ruff check .`
+  - Usa SQLModel para modelos de base de datos
+  - Usa `app.frontend()` para servir el frontend
+  - Prefiere `Annotated[..., Query()]` para query parameters
 
-- Siempre verifica las skills instaladas y sigue sus convenciones antes de realizar las tareas
-- Verifica el plan hazmelo saber antes de realizar cualquier cosa
-- nunca suvas el archi .env
+## Prohibiciones:
+  - POR NINGUN MOTIVO SUBAS EL .env AL GITHUB 

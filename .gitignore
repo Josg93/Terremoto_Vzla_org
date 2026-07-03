@@ -21,6 +21,9 @@ dist/
 !.env.example
 secrets.json
 
+# Alembic cache
+alembic/__pycache__/
+
 # Bases de datos locales (si usas SQLite de prueba)
 *.sqlite
 *.sqlite3

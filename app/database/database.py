@@ -1,20 +1,18 @@
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
 import os
+
 from dotenv import load_dotenv
+from sqlmodel import Session, create_engine
 
 load_dotenv()
 
-DATABASE_URL=os.getenv("DATABASE_URL")
+DATABASE_URL = os.getenv(
+    "DATABASE_URL",
+    "postgresql://postgres:postgres@localhost:5432/medinsumos",
+)
 
-#El engine maneja la conexion con la base de datos
+engine = create_engine(DATABASE_URL, echo=False)
 
-engine = create_engine(DATABASE_URL)
-SessionLocal= sessionmaker(autocommit=False , autoFlush = False , bind= engine )  
 
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()    
+def get_session():
+    with Session(engine) as session:
+        yield session

@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Medinsumos Venezuela | Registro de Necesidades Médicas</title>
+  <meta name="description" content="Portal de información y recopilación de insumos médicos necesarios en hospitales de Venezuela para pacientes de bajos recursos.">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="app-container">
+    <header class="app-header">
+      <div class="header-inner">
+        <div class="logo-section">
+          <div class="logo-icon">
+            <i class="fas fa-heartbeat"></i>
+          </div>
+          <div class="logo-text">
+            <h1>Medinsumos Venezuela</h1>
+            <span>Acción Social & Ayuda Humanitaria</span>
+          </div>
+        </div>
+        <div class="header-controls">
+          <button id="theme-toggle-btn" class="theme-toggle-btn" title="Cambiar Tema">
+            <i class="fas fa-moon"></i>
+          </button>
+          <button id="btn-open-add-hospital" class="btn btn-secondary btn-sm">
+            <i class="fas fa-hospital"></i> Hospital
+          </button>
+          <button id="btn-open-add-victim" class="btn btn-primary btn-sm">
+            <i class="fas fa-user-plus"></i> Registrar
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <div id="demo-banner" class="demo-banner" style="display: none;">
+      <div>
+        <i class="fas fa-wifi-slash" style="margin-right: 8px;"></i>
+        <strong>Modo Demostración:</strong> Backend no disponible. Datos almacenados localmente.
+      </div>
+      <button class="btn btn-secondary" onclick="location.reload()" style="padding: 4px 10px; font-size: 12px; margin-left: 10px;">
+        <i class="fas fa-sync"></i> Reconectar
+      </button>
+    </div>
+
+    <section class="dashboard-metrics" aria-label="Métricas del Sistema">
+      <div class="metric-card info" id="card-total">
+        <span class="metric-title">Víctimas en Espera</span>
+        <span class="metric-value" id="metric-total-cases">0</span>
+        <span class="metric-sub">Casos activos en el país</span>
+      </div>
+      <div class="metric-card critical" id="card-critical">
+        <span class="metric-title">Estados Críticos</span>
+        <span class="metric-value" id="metric-critical-cases">0</span>
+        <span class="metric-sub">Pacientes de máxima prioridad</span>
+      </div>
+      <div class="metric-card stable" id="card-needs">
+        <span class="metric-title">Necesidades Cubiertas</span>
+        <span class="metric-value" id="metric-satisfied-needs">0/0</span>
+        <span class="metric-sub">Insumos recolectados e históricos</span>
+      </div>
+      <div class="metric-card" id="card-hospitals">
+        <span class="metric-title">Hospitales Activos</span>
+        <span class="metric-value" id="metric-hospitals">0</span>
+        <span class="metric-sub">Centros médicos registrados</span>
+      </div>
+    </section>
+
+    <section class="search-filter-section" aria-label="Búsqueda y Filtros">
+      <div class="search-bar-container">
+        <div class="search-input-wrapper">
+          <i class="fas fa-search"></i>
+          <input type="text" id="search-input" class="search-input" placeholder="Buscar por nombre, apellido o cédula...">
+        </div>
+      </div>
+      <div class="filters-row">
+        <select id="filter-estado" class="filter-select">
+          <option value="">Todos los Estados</option>
+        </select>
+        <select id="filter-hospital" class="filter-select">
+          <option value="">Todos los Hospitales</option>
+        </select>
+        <select id="filter-status" class="filter-select">
+          <option value="">Todos los Estados Médicos</option>
+          <option value="critico">Crítico</option>
+          <option value="estable">Estable</option>
+          <option value="alta">Alta médica</option>
+          <option value="fallecido">Fallecido</option>
+          <option value="desaparecido">Desaparecido</option>
+        </select>
+        <select id="filter-categoria" class="filter-select">
+          <option value="">Cualquier Insumo</option>
+          <option value="medicamento">Medicamentos</option>
+          <option value="insumo">Insumos Médicos</option>
+          <option value="sangre">Donación de Sangre</option>
+        </select>
+      </div>
+      <div id="filter-chips" class="filter-chips"></div>
+    </section>
+
+    <main>
+      <div class="list-header">
+        <h2 class="list-title">Registro de Casos</h2>
+        <span id="list-count" class="list-count">0</span>
+      </div>
+      <div id="victims-list"></div>
+    </main>
+
+    <footer>
+      <p>&copy; 2026 Medinsumos Venezuela. Diseñado para un impacto social rápido y transparente.</p>
+      <p style="font-size:11px; margin-top:4px;">Backend potenciado por FastAPI. Interfaz responsiva y offline-ready.</p>
+    </footer>
+  </div>
+
+  <div id="victim-overlay" class="overlay" role="dialog" aria-label="Ficha del Paciente">
+    <div class="overlay-scrim"></div>
+    <div class="overlay-content">
+      <header class="overlay-header">
+        <button id="btn-overlay-back" class="overlay-back-btn">
+          <i class="fas fa-arrow-left"></i> Volver
+        </button>
+        <h2 class="overlay-title">Ficha del Paciente</h2>
+        <button id="theme-toggle-btn-overlay" class="theme-toggle-btn" title="Cambiar Tema">
+          <i class="fas fa-moon"></i>
+        </button>
+      </header>
+      <div class="overlay-body" id="overlay-body"></div>
+    </div>
+  </div>
+
+  <div id="modal-add-hospital" class="slide-up-panel">
+    <div class="slide-up-scrim"></div>
+    <div class="slide-up-content">
+      <div class="slide-up-handle"></div>
+      <button id="btn-close-add-hospital" class="modal-close-btn">&times;</button>
+      <h2 class="modal-title"><i class="fas fa-hospital"></i> Registrar Nuevo Centro de Salud</h2>
+      <form id="form-add-hospital">
+        <div class="form-group">
+          <label for="hosp-estado-select">Estado de Venezuela</label>
+          <select id="hosp-estado-select" class="filter-select" required>
+            <option value="" disabled selected>Selecciona Estado</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="hosp-ciudad-select">Ciudad</label>
+          <select id="hosp-ciudad-select" class="filter-select" disabled required>
+            <option value="" disabled selected>Primero selecciona estado</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="hosp-name-input">Nombre del Hospital</label>
+          <input type="text" id="hosp-name-input" class="form-control" placeholder="Ej. Hospital Central de Pariata" required>
+        </div>
+        <div class="form-actions">
+          <button type="button" class="btn btn-secondary" onclick="document.getElementById('btn-close-add-hospital').click()">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Registrar Hospital</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="modal-add-victim" class="slide-up-panel">
+    <div class="slide-up-scrim"></div>
+    <div class="slide-up-content" style="max-width: 650px;">
+      <div class="slide-up-handle"></div>
+      <button id="btn-close-add-victim" class="modal-close-btn">&times;</button>
+      <h2 class="modal-title"><i class="fas fa-user-plus"></i> Registrar Caso de Paciente</h2>
+      <form id="form-add-victim">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="victim-cedula-input">Cédula de Identidad (máx 8 dígitos)</label>
+            <input type="text" id="victim-cedula-input" class="form-control" placeholder="Ej. 12345678" pattern="^[0-9]+$" maxlength="8" required>
+          </div>
+          <div class="form-group">
+            <label for="victim-status-select">Estado Médico Inicial</label>
+            <select id="victim-status-select" class="filter-select">
+              <option value="estable">Estable</option>
+              <option value="critico" selected>Crítico</option>
+              <option value="alta">Alta médica</option>
+              <option value="fallecido">Fallecido</option>
+              <option value="desaparecido">Desaparecido</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="victim-name-input">Nombres del Paciente</label>
+            <input type="text" id="victim-name-input" class="form-control" placeholder="Ej. Juan Carlos" required>
+          </div>
+          <div class="form-group">
+            <label for="victim-apellidos-input">Apellidos del Paciente</label>
+            <input type="text" id="victim-apellidos-input" class="form-control" placeholder="Ej. Pérez Gómez" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="victim-estado-select">Estado de Hospitalización</label>
+            <select id="victim-estado-select" class="filter-select" required>
+              <option value="" disabled selected>Selecciona Estado</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="victim-ciudad-select">Ciudad</label>
+            <select id="victim-ciudad-select" class="filter-select" disabled required>
+              <option value="" disabled selected>Primero selecciona estado</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="victim-hospital-select">Hospital donde se encuentra</label>
+          <select id="victim-hospital-select" class="filter-select" disabled required>
+            <option value="" disabled selected>Primero selecciona ciudad</option>
+          </select>
+        </div>
+        <div class="form-section-divider">
+          <h3>Necesidades Médicas Iniciales</h3>
+          <button type="button" id="btn-add-need-row" class="btn btn-secondary" style="padding:6px 12px; font-size:12px;">
+            <i class="fas fa-plus"></i> Añadir Insumo
+          </button>
+        </div>
+        <div id="form-needs-list" class="dynamic-list"></div>
+        <div class="form-section-divider">
+          <h3>Contactos de Emergencia</h3>
+          <button type="button" id="btn-add-contact-row" class="btn btn-secondary" style="padding:6px 12px; font-size:12px;">
+            <i class="fas fa-plus"></i> Añadir Contacto
+          </button>
+        </div>
+        <div id="form-contacts-list" class="dynamic-list"></div>
+        <div class="form-actions" style="margin-top:32px; border-top:1px solid var(--border-color); padding-top:20px;">
+          <button type="button" class="btn btn-secondary" onclick="document.getElementById('btn-close-add-victim').click()">Cancelar</button>
+          <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Guardar Ficha</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
